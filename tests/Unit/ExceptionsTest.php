@@ -1,9 +1,9 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use DivineOmega\BucketTesting\Bucket;
-use DivineOmega\BucketTesting\BucketManager;
-use DivineOmega\BucketTesting\WeightedBucket;
+use JordJD\BucketTesting\Bucket;
+use JordJD\BucketTesting\BucketManager;
+use JordJD\BucketTesting\WeightedBucket;
 
 final class ExceptionsTest extends TestCase
 {

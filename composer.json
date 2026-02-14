@@ -19,7 +19,7 @@
   },
   "autoload": {
     "psr-4": {
-      "DivineOmega\\BucketTesting\\": "./src/"
+      "JordJD\\BucketTesting\\": "./src/"
     }
   },
   "replace": {

@@ -28,8 +28,8 @@ Remember to include the `vendor/autoload.php` file if your framework does not al
 
 ```php
 
-use \DivineOmega\BucketTesting\BucketManager;
-use \DivineOmega\BucketTesting\Bucket;
+use \JordJD\BucketTesting\BucketManager;
+use \JordJD\BucketTesting\Bucket;
 
 // Create a new bucket manager
 $bucketManager = new BucketManager;

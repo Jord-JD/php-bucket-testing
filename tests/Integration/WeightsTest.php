@@ -1,8 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use DivineOmega\BucketTesting\Bucket;
-use DivineOmega\BucketTesting\BucketManager;
+use JordJD\BucketTesting\Bucket;
+use JordJD\BucketTesting\BucketManager;
 
 final class WeightsTest extends TestCase
 {

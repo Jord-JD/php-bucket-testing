@@ -1,6 +1,6 @@
 <?php
 
-namespace DivineOmega\BucketTesting;
+namespace JordJD\BucketTesting;
 
 class Bucket
 {
