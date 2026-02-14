@@ -1,26 +1,34 @@
 {
-    "name": "divineomega/php-bucket-testing",
-    "description": "This library enables developers to easily redirect users to different URLs, for the purpose of bucket testing. Bucket testing is also known as A/B testing or split testing. This type of testing is used to test two or more versions of a webpage to determine which one performs better based on specfied key metrics, such as clicks, downloads, purchases or any other form of conversion.",
-    "license": "LGPL-3.0-only",
-    "keywords": [
-        "a b testing",
-        "split testing",
-        "bucket testing",
-        "UX testing",
-        "UI testing",
-        "testing",
-        "frontend testing"
-      ],
-    "require": {
-        "php": ">=5.3"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^5.7",
-        "php-coveralls/php-coveralls": "^2.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "DivineOmega\\BucketTesting\\": "./src/"
-        }
+  "name": "jord-jd/php-bucket-testing",
+  "description": "This library enables developers to easily redirect users to different URLs, for the purpose of bucket testing. Bucket testing is also known as A/B testing or split testing. This type of testing is used to test two or more versions of a webpage to determine which one performs better based on specfied key metrics, such as clicks, downloads, purchases or any other form of conversion.",
+  "license": "LGPL-3.0-only",
+  "keywords": [
+    "a b testing",
+    "split testing",
+    "bucket testing",
+    "UX testing",
+    "UI testing",
+    "testing",
+    "frontend testing"
+  ],
+  "require": {
+    "php": ">=5.3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.7",
+    "php-coveralls/php-coveralls": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "DivineOmega\\BucketTesting\\": "./src/"
     }
+  },
+  "replace": {
+    "divineomega/php-bucket-testing": "self.version"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "3.0-dev"
+    }
+  }
 }
