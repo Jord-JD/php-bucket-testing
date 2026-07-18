@@ -3,10 +3,21 @@
 namespace JordJD\BucketTesting;
 
 use Exception;
+use InvalidArgumentException;
 
 class BucketManager
 {
     private $weightedBuckets = [];
+    private $randomIntegerGenerator;
+
+    public function __construct($randomIntegerGenerator = null)
+    {
+        if ($randomIntegerGenerator !== null && !is_callable($randomIntegerGenerator)) {
+            throw new InvalidArgumentException('Random integer generator must be callable.');
+        }
+
+        $this->randomIntegerGenerator = $randomIntegerGenerator;
+    }
 
     public function add(Bucket $bucket)
     {
@@ -37,7 +48,7 @@ class BucketManager
 
     private function getRandomWeightedBucket()
     {
-        $weightedBucketSelector = new WeightedBucketSelector($this->weightedBuckets);
+        $weightedBucketSelector = new WeightedBucketSelector($this->weightedBuckets, $this->randomIntegerGenerator);
 
         return $weightedBucketSelector->getRandomBucket();
     }
@@ -47,11 +58,28 @@ class BucketManager
         return $this->getRandomWeightedBucket()->bucket;
     }
 
-    public function redirect()
+    /**
+     * Select the same weighted bucket for the same stable subject identifier.
+     *
+     * This is useful for keeping a user, account, or session in one experiment
+     * cohort without storing the assignment separately.
+     */
+    public function getBucketForSubject($subject)
     {
+        $weightedBucketSelector = new WeightedBucketSelector($this->weightedBuckets);
+
+        return $weightedBucketSelector->getBucketForSubject($subject)->bucket;
+    }
+
+    public function redirect($statusCode = 302)
+    {
+        if (!is_int($statusCode) || $statusCode < 300 || $statusCode > 399) {
+            throw new InvalidArgumentException('Redirect status code must be an integer between 300 and 399.');
+        }
+
         $bucket = $this->getRandomBucket();
 
-        header('location: '.$bucket->url);
+        header('Location: '.$bucket->url, true, $statusCode);
         die;
     }
 }

@@ -6,32 +6,49 @@ use JordJD\BucketTesting\BucketManager;
 
 final class WeightsTest extends TestCase
 {
-    public function testWeights()
+    private function createManager($randomIntegerGenerator = null)
     {
-        // Create a new bucket manager
-        $bucketManager = new BucketManager();
-
-        // Add buckets, with URLs and optional weights
+        $bucketManager = new BucketManager($randomIntegerGenerator);
         $bucketManager->add(new Bucket('https://google.co.uk/'))->withWeight(25);
         $bucketManager->add(new Bucket('https://php.net/'))->withWeight(75);
 
-        // For testing, get thousands of random buckets and count how often the URLs appear
-        $urlCount = [];
+        return $bucketManager;
+    }
 
-        for ($i = 0; $i < 100000; $i++) {
-            $bucket = $bucketManager->getRandomBucket();
+    public function testCustomRandomGeneratorSelectsWeightedRanges()
+    {
+        $firstBucketManager = $this->createManager(function ($minimum, $maximum) {
+            return $minimum;
+        });
+        $lastBucketManager = $this->createManager(function ($minimum, $maximum) {
+            return $maximum;
+        });
 
-            if (!isset($urlCount[$bucket->url])) {
-                $urlCount[$bucket->url] = 0;
-            }
+        $this->assertSame('https://google.co.uk/', $firstBucketManager->getRandomBucket()->url);
+        $this->assertSame('https://php.net/', $lastBucketManager->getRandomBucket()->url);
+    }
 
-            $urlCount[$bucket->url]++;
+    public function testSubjectAssignmentIsStableAndRespectsWeights()
+    {
+        $bucketManager = $this->createManager();
+        $firstAssignment = $bucketManager->getBucketForSubject('account-123')->url;
+
+        for ($i = 0; $i < 20; $i++) {
+            $this->assertSame($firstAssignment, $bucketManager->getBucketForSubject('account-123')->url);
         }
 
-        // Test counts are in acceptable ranges
-        $this->assertGreaterThan(24500, $urlCount['https://google.co.uk/']);
-        $this->assertLessThan(25500, $urlCount['https://google.co.uk/']);
-        $this->assertGreaterThan(74500, $urlCount['https://php.net/']);
-        $this->assertLessThan(75500, $urlCount['https://php.net/']);
+        $urlCount = [
+            'https://google.co.uk/' => 0,
+            'https://php.net/' => 0,
+        ];
+
+        for ($i = 0; $i < 1000; $i++) {
+            $urlCount[$bucketManager->getBucketForSubject('account-'.$i)->url]++;
+        }
+
+        $this->assertGreaterThan(200, $urlCount['https://google.co.uk/']);
+        $this->assertLessThan(300, $urlCount['https://google.co.uk/']);
+        $this->assertGreaterThan(700, $urlCount['https://php.net/']);
+        $this->assertLessThan(800, $urlCount['https://php.net/']);
     }
 }
